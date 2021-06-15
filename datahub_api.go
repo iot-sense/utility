@@ -9,6 +9,19 @@ import (
 )
 
 func DataHubTagListPlugin() (tagList []interface{}) {
+
+	ssoID := G_CONFIGER.GetString("sso.id")
+	Logger.Debug("sso.id :", ssoID)
+	ssoEnKd := G_CONFIGER.GetString("sso.kd")
+	Logger.Debug("sso.kd :", ssoEnKd)
+	ssoToken := G_CONFIGER.GetString("sso.token")
+	Logger.Debug("sso.token :", ssoToken)
+	ssoDeKd := AesDecryptCFB(ssoEnKd)
+	//Logger.Info("sso.kd :", ssoDeKd)
+	ssoToken = SSOGetAuth(ssoID, ssoDeKd, ssoToken)
+	G_CONFIGER.Set("sso.token", ssoToken)
+	ssoToken = G_CONFIGER.GetString("sso.token")
+	Logger.Debug("sso.token :", ssoToken)
 	datahubUrl := G_CONFIGER.GetString("datahub.url")
 	Logger.Debug("datahub.url : ", datahubUrl)
 	nodeId := G_CONFIGER.GetString("datahub.nodeId")
