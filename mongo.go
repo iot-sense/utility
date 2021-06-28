@@ -80,3 +80,16 @@ func MongoDistinct(collection *mongo.Collection, fieldName string, filter interf
 	}
 	return values
 }
+
+// MongoAggregate func
+func MongoAggregate(collection *mongo.Collection, pipeline mongo.Pipeline) (results []bson.M) {
+	opts := options.Aggregate().SetMaxTime(0)
+	cursor, err := collection.Aggregate(context.TODO(), pipeline, opts)
+	if err != nil {
+		Logger.Error(err)
+	}
+	if err = cursor.All(context.TODO(), &results); err != nil {
+		Logger.Error(err)
+	}
+	return
+}
